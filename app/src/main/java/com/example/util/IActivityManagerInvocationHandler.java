@@ -28,13 +28,15 @@ public class IActivityManagerInvocationHandler implements InvocationHandler {
                     break;
                 }
             }
+            Intent originItent = (Intent)objects[index];
+            if(null!=originItent.getComponent()&&originItent.getComponent().getClassName().equals("com.example.myapplication.NewActivity")){
+                MyApplication.myLog.e("start hook Activity");
+                Intent newIntent = new Intent();
+                newIntent.setComponent(new ComponentName("com.example.myapplication","com.example.myapplication.StubActivity$C1"));
+                newIntent.putExtra("orginIntent",originItent);
+              //  objects[index] = newIntent;
 
-            Intent newIntent = new Intent();
-            newIntent.setComponent(new ComponentName("hookIntent","com.example.myapplication.MainActivity"));
-
-            newIntent.putExtra("orginIntent",(Intent)objects[index]);
-
-            objects[index] = newIntent;
+            }
 
 
         }

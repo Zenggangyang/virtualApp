@@ -1,5 +1,7 @@
 package com.example.util;
 
+import android.os.Handler;
+
 import java.lang.reflect.Proxy;
 
 public class SystemServiceManager {
@@ -36,7 +38,18 @@ public class SystemServiceManager {
 
     private void hookActivityThread(){
 
+        try {
+            Object instance_ActivityThread = Reflector.on("android.app.ActivityThread").findField("sCurrentActivityThread").getStaticField();
+            Object instance_mH = Reflector.on("android.app.ActivityThread").findField("mH").getInstanceField(instance_ActivityThread);
+            Reflector.on("android.os.Handler").findField("mCallback").setInstanceField(instance_mH,new ActivityThreadCallback((Handler) instance_mH));
 
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (Reflector.RefectedException e) {
+            e.printStackTrace();
+        }
 
 
     }
